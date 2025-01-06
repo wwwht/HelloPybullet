@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<robot name="three_axis_robot">
+
+<link name="base_link">
+    <visual>
+      <geometry>
+        <mesh filename="../meshes/ur5/visual/base.obj"/>
+      </geometry>
+      <material name="LightGrey">
+        <color rgba="0.7 0.7 0.7 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="../meshes/ur5/collision/base.stl"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="4.0"/>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <inertia ixx="0.00443333156" ixy="0.0" ixz="0.0" iyy="0.00443333156" iyz="0.0" izz="0.0072"/>
+    </inertial>
+  </link>
+
+  <joint name="prismatic_joint" type="prismatic">
+    <parent link="base_link"/>
+    <child link="prismatic_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="0.0" upper="0.3" effort="50" velocity="0.5"/>
+  </joint>
+
+  <link name="prismatic_link">
+    <visual>
+        <origin xyz="0 0 0.25" rpy="0 0 0"/>
+        <geometry>
+            <cylinder radius="0.05" length="0.3"/>
+        </geometry>
+        <material name="Red">
+            <color rgba="1 0 0 1"/>
+        </material>
+    </visual>
+    <collision>
+        <geometry>
+            <cylinder radius="0.05" length="0.1"/>
+        </geometry>
+    </collision>
+    <inertial>
+        <mass value="1.0"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
+    </inertial>
+  </link>
+
+  <joint name="wrist_1_joint" type="revolute">
+      <parent link="prismatic_link"/>
+      <child link="wrist_1_link"/>
+      <!-- 将关节放置在 prismatic_link 的顶部 -->
+      <origin rpy="0.0 1.57079632679 0.0" xyz="0.0 0.0 0.4"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="28.0" lower="-3.14159265359" upper="3.14159265359" velocity="3.2"/>
+      <dynamics damping="0.0" friction="0.0"/>
+  </joint>
+
+
+  <link name="wrist_1_link">
+    <visual>
+      <geometry>
+        <mesh filename="../meshes/ur5/visual/wrist1.obj"/>
+      </geometry>
+      <material name="UR-Blue">
+        <color rgba="0.376 0.576 0.674 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="../meshes/ur5/collision/wrist1.stl"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1.219"/>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <inertia ixx="0.111172755531" ixy="0.0" ixz="0.0" iyy="0.111172755531" iyz="0.0" izz="0.21942"/>
+    </inertial>
+  </link> 
+
+  <joint name="wrist_2_joint" type="revolute">
+    <parent link="wrist_1_link"/>
+    <child link="wrist_2_link"/>
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.093 0.0"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="28.0" lower="-3.14159265359" upper="3.14159265359" velocity="3.2"/>
+    <dynamics damping="0.0" friction="0.0"/>
+  </joint>
+  <link name="wrist_2_link">
+    <visual>
+      <geometry>
+        <mesh filename="../meshes/ur5/visual/wrist2.obj"/>
+      </geometry>
+      <material name="DarkGray">
+        <color rgba="0.5 0.5 0.5 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="../meshes/ur5/collision/wrist2.stl"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1.219"/>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <inertia ixx="0.111172755531" ixy="0.0" ixz="0.0" iyy="0.111172755531" iyz="0.0" izz="0.21942"/>
+    </inertial>
+  </link>
+
+  <joint name="connect_camera" type="fixed">
+    <parent link="wrist_2_link"/>
+    <child link="camera_link"/>
+    <origin rpy="0 0 0" xyz="0 0 0.1"/>
+  </joint>
+
+  <link name="camera_link">
+    <visual>
+      <geometry>
+         <box size="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+  </link>
+
+</robot>
